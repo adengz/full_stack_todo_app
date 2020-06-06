@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head></head>
+<body>
+    <div>
+        <ul id="nav">
+            <button class="btn-nnav" onclick="clickTab('All')">All</button>
+            <button class="btn-nav" onclick="clickTab('Active')">Active</button>
+            <button class="btn-nav" onclick="clickTab('Completed')">Completed</button>
+            <button class="btn-nav" onclick="resetDB()">Reset</button>
+        </ul>
+    </div>
+    <div>
+        <form id="form">
+            <input id="new-todo" type="text" placeholder="Create a todo..." />
+            <input type="submit" value="Create" />
+        </form>
+    </div>
+        <h1 id="tab"></h1>
+    <div>
+        <ul id="todos"></ul>
+    </div>
+    <script src="../static/js/index.js"></script>
+</body>
