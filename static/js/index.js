@@ -1,5 +1,3 @@
-let currTab = 'All';
-
 const readTodoList = () => JSON.parse(localStorage.getItem('todo_list'));
 const updateTodoList = (todoList) => {localStorage.setItem('todo_list', JSON.stringify(todoList))};
 
@@ -21,17 +19,15 @@ const updateTodo = (todoId) => {
 }
 
 const deleteTodo = (todoId) => {
-    let todoList = readTodoList();
-    todoList = todoList.filter((todo) => todo.id !== todoId);
-    updateTodoList(todoList);
+    const todoList = readTodoList();
+    updateTodoList(todoList.filter((todo) => todo.id !== todoId));
 }
 
 const checkboxChangeListener = (todoId, li) => {
     const status = updateTodo(todoId);
     if (currTab === 'All') {
         li.className = (status? 'completed' : 'active') + '-todo';
-    }
-    else {
+    } else {
         li.parentElement.removeChild(li);
     }
 }
@@ -54,8 +50,7 @@ const renderTodo = (todo) => {
     })
     li.appendChild(checkbox);
 
-    const task = document.createTextNode(todo.task);
-    li.appendChild(task);
+    li.appendChild(document.createTextNode(todo.task));
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'btn-del';
@@ -79,8 +74,7 @@ document.getElementById('form').onsubmit = function(event) {
     newTodo.value = '';
     const todoId = createTodo(task);
     if (currTab !== 'Completed') {
-        const todo = {'completed': false, 'task': task, 'id': todoId};
-        const li = renderTodo(todo);
+        const li = renderTodo({'completed': false, 'task': task, 'id': todoId});
         const todosUl = document.getElementById('todos');
         todosUl.insertBefore(li, todosUl.firstChild);
     }
@@ -89,10 +83,9 @@ document.getElementById('form').onsubmit = function(event) {
 const renderTodoList = (todoList) => {
     const todosUl = document.getElementById('todos');
     todosUl.innerHTML = '';
-    let todo, li;
+    let todo;
     for (todo of todoList) {
-        li = renderTodo(todo);
-        todosUl.appendChild(li);
+        todosUl.appendChild(renderTodo(todo));
     }
 }
 
@@ -100,8 +93,7 @@ const filterTodoList = (tab) => {
     let todoList = readTodoList();
     if (tab === 'Active') {
         todoList = todoList.filter((todo) => !todo.completed);
-    }
-    else if (tab === 'Completed') {
+    } else if (tab === 'Completed') {
         todoList = todoList.filter((todo) => todo.completed);
     }
     return todoList;
@@ -121,8 +113,21 @@ const resetDB = () => {
     changeTab('All');
 }
 
+const clickReset = () => {confirm('Are you sure you want to reset all the data?')? resetDB(): void(0)}
 
-if (readTodoList() === null || localStorage.getItem('todo_id') === null) {
-    resetDB();
+const initApp = () => {
+    if (readTodoList() === null || localStorage.getItem('todo_id') === null) {
+        resetDB();
+    }
+    var currTab;
+    changeTab('All');
+    let btn;
+    for (btn of document.getElementsByClassName('btn-nav')) {
+        if (btn.innerHTML === 'Reset') {
+            btn.onclick = clickReset;
+        } else {
+            const tab = btn.innerHTML;
+            btn.onclick = function() {changeTab(tab)};
+        }
+    }
 }
-

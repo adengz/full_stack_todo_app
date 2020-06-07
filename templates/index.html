@@ -2,13 +2,13 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
 </head>
-<body>
+<body onload="initApp()">
     <div id="frame">
         <div id="nav">
-            <button class="btn-nav" onclick="changeTab('All')">All</button>
-            <button class="btn-nav" onclick="changeTab('Active')">Active</button>
-            <button class="btn-nav" onclick="changeTab('Completed')">Completed</button>
-            <button class="btn-nav" onclick="resetDB()">Reset</button>
+            <button class="btn-nav">All</button>
+            <button class="btn-nav">Active</button>
+            <button class="btn-nav">Completed</button>
+            <button class="btn-nav">Reset</button>
         </div>
         <div>
             <form id="form">
