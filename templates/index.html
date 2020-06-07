@@ -5,9 +5,9 @@
 <body>
     <div id="frame">
         <div id="nav">
-            <button class="btn-nav" onclick="clickTab('All')">All</button>
-            <button class="btn-nav" onclick="clickTab('Active')">Active</button>
-            <button class="btn-nav" onclick="clickTab('Completed')">Completed</button>
+            <button class="btn-nav" onclick="changeTab('All')">All</button>
+            <button class="btn-nav" onclick="changeTab('Active')">Active</button>
+            <button class="btn-nav" onclick="changeTab('Completed')">Completed</button>
             <button class="btn-nav" onclick="resetDB()">Reset</button>
         </div>
         <div>
@@ -15,9 +15,6 @@
                 <input id="new-todo" type="text" placeholder="Create a todo..." />
                 <input type="submit" value="Create" />
             </form>
-        </div>
-        <div>
-            <h1 id="tab"></h1>
         </div>
         <div>
             <ul id="todos"></ul>
