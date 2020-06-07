@@ -23,9 +23,11 @@ const deleteTodo = (todoId) => {
     updateTodoList(todoList.filter((todo) => todo.id !== todoId));
 }
 
+const getCurrentTabBtn = () => document.getElementsByClassName('btn-nav-curr')[0];
+
 const checkboxChangeListener = (todoId, li) => {
     const status = updateTodo(todoId);
-    if (currTab === 'All') {
+    if (getCurrentTabBtn().innerText === 'All') {
         li.className = (status? 'completed' : 'active') + '-todo';
     } else {
         li.parentElement.removeChild(li);
@@ -63,7 +65,7 @@ const renderTodo = (todo) => {
     return li;
 }
 
-document.getElementById('form').onsubmit = function(event) {
+document.getElementById('form').onsubmit = function() {
     event.preventDefault();
     const newTodo = document.getElementById('new-todo');
     const task = newTodo.value.trim();
@@ -73,7 +75,7 @@ document.getElementById('form').onsubmit = function(event) {
     }
     newTodo.value = '';
     const todoId = createTodo(task);
-    if (currTab !== 'Completed') {
+    if (getCurrentTabBtn().innerText !== 'Completed') {
         const li = renderTodo({'completed': false, 'task': task, 'id': todoId});
         const todosUl = document.getElementById('todos');
         todosUl.insertBefore(li, todosUl.firstChild);
@@ -99,35 +101,34 @@ const filterTodoList = (tab) => {
     return todoList;
 }
 
-const changeTab = (tab) => {
-    currTab = tab;
-    const todoList = filterTodoList(tab);
-    todoList.reverse();
-    renderTodoList(todoList);
+const changeTab = () => {
+    const currTabBtn = getCurrentTabBtn();
+    const newTabBtn = event.target;
+    if (currTabBtn !== newTabBtn) {
+        currTabBtn.className = 'btn-nav';
+        newTabBtn.className = 'btn-nav-curr';
+        const todoList = filterTodoList(newTabBtn.innerText);
+        todoList.reverse();
+        renderTodoList(todoList);
+    }
 }
 
 const resetDB = () => {
     localStorage.setItem('todo_list', JSON.stringify([]));
     localStorage.setItem('todo_id', 1);
     document.getElementById('todos').innerHTML = '';
-    changeTab('All');
 }
 
-const clickReset = () => {confirm('Are you sure you want to reset all the data?')? resetDB(): void(0)}
+const clickReset = () => {if (confirm('Are you sure you want to reset all the data?')) resetDB();}
 
 const initApp = () => {
     if (readTodoList() === null || localStorage.getItem('todo_id') === null) {
         resetDB();
     }
-    var currTab;
-    changeTab('All');
+    renderTodoList(readTodoList());
     let btn;
-    for (btn of document.getElementsByClassName('btn-nav')) {
-        if (btn.innerHTML === 'Reset') {
-            btn.onclick = clickReset;
-        } else {
-            const tab = btn.innerHTML;
-            btn.onclick = function() {changeTab(tab)};
-        }
+    for (btn of document.getElementById('nav').childNodes) {
+        const tab = btn.innerText;
+        btn.onclick = (tab === 'Reset')? clickReset : changeTab;
     }
 }

@@ -11,12 +11,17 @@ button {
 #nav {
     padding: 10px 0;
 }
-.btn-nav {
+.btn-nav, .btn-nav-curr {
     width: 120px;
     height: 40px;
     border: none;
     font-size: 20px;
     color: white;
+}
+.btn-nav {
+    background-color: #A39280;
+}
+.btn-nav:hover, .btn-nav-curr {
     background-color: #6993A6;
 }
 input[type=text] {
