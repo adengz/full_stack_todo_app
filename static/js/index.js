@@ -26,23 +26,31 @@ const deleteTodo = (todoId) => {
     updateTodoList(todoList);
 }
 
+const checkboxChangeListener = (todoId, li) => {
+    const status = updateTodo(todoId);
+    if (currTab === 'All') {
+        li.className = (status? 'completed' : 'active') + '-todo';
+    }
+    else {
+        li.parentElement.removeChild(li);
+    }
+}
+
+const deleteBtnClickListener = (todoId, li) => {
+    deleteTodo(todoId);
+    li.parentElement.removeChild(li);
+}
+
 const renderTodo = (todo) => {
     const li = document.createElement('li');
     li.className = (todo.completed? 'completed' : 'active') + '-todo';
-    const todosUl = document.getElementById('todos');
     
     const checkbox = document.createElement('input');
     checkbox.className = 'check-completed';
     checkbox.type = 'checkbox';
     checkbox.checked = todo.completed? true : false;
     checkbox.addEventListener('change', function () {
-        const status = updateTodo(todo.id);
-        if (currTab === 'All') {
-            this.parentElement.className = (status? 'completed' : 'active') + '-todo';
-        }
-        else {
-            todosUl.removeChild(this.parentElement);
-        }
+        checkboxChangeListener(todo.id, li);
     })
     li.appendChild(checkbox);
 
@@ -53,8 +61,7 @@ const renderTodo = (todo) => {
     deleteBtn.className = 'btn-del';
     deleteBtn.innerHTML = '&#10005;';
     deleteBtn.addEventListener('click', function () {
-        deleteTodo(todo.id);
-        todosUl.removeChild(this.parentElement);
+        deleteBtnClickListener(todo.id, li);
     })
     li.appendChild(deleteBtn);
 
