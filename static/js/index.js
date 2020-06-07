@@ -82,23 +82,21 @@ document.getElementById('form').onsubmit = function() {
     }
 }
 
-const renderTodoList = (todoList) => {
+const renderTodoList = () => {
     const todosUl = document.getElementById('todos');
     todosUl.innerHTML = '';
+    let todoList = readTodoList();
+    todoList.reverse();
+    const currTab = getCurrentTabBtn().innerText;
+    if (currTab === 'Active') {
+        todoList = todoList.filter((todo) => !todo.completed);
+    } else if (currTab === 'Completed') {
+        todoList = todoList.filter((todo) => todo.completed);
+    }
     let todo;
     for (todo of todoList) {
         todosUl.appendChild(renderTodo(todo));
     }
-}
-
-const filterTodoList = (tab) => {
-    let todoList = readTodoList();
-    if (tab === 'Active') {
-        todoList = todoList.filter((todo) => !todo.completed);
-    } else if (tab === 'Completed') {
-        todoList = todoList.filter((todo) => todo.completed);
-    }
-    return todoList;
 }
 
 const changeTab = () => {
@@ -107,9 +105,7 @@ const changeTab = () => {
     if (currTabBtn !== newTabBtn) {
         currTabBtn.className = 'btn-nav';
         newTabBtn.className = 'btn-nav-curr';
-        const todoList = filterTodoList(newTabBtn.innerText);
-        todoList.reverse();
-        renderTodoList(todoList);
+        renderTodoList();
     }
 }
 
@@ -125,10 +121,9 @@ const initApp = () => {
     if (readTodoList() === null || localStorage.getItem('todo_id') === null) {
         resetDB();
     }
-    renderTodoList(readTodoList());
+    renderTodoList();
     let btn;
     for (btn of document.getElementById('nav').childNodes) {
-        const tab = btn.innerText;
-        btn.onclick = (tab === 'Reset')? clickReset : changeTab;
+        btn.onclick = (btn.innerText === 'Reset')? clickReset : changeTab;
     }
 }
