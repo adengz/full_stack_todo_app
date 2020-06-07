@@ -62,7 +62,6 @@ form.onsubmit = function(event) {
 function renderTodo(todo) {
     const li = document.createElement('li');
     li.className = (todo.completed? 'completed' : 'active') + '-todo';
-    li.setAttribute('todo-id', todo.id);
     
     const checkbox = document.createElement('input');
     checkbox.className = 'check-completed';
@@ -83,8 +82,8 @@ function renderTodo(todo) {
     li.appendChild(task);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-button';
-    deleteBtn.innerHTML = '&cross;';
+    deleteBtn.className = 'btn-del';
+    deleteBtn.innerHTML = '&#10005;';
     deleteBtn.addEventListener('click', function () {
         deleteTodo(todo.id);
         todosModel.removeChild(this.parentElement);
